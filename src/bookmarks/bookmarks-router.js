@@ -1,6 +1,6 @@
 const express = require('express')
 const uuid = require('uuid/v4')
-const {webId} = require('valid-url')
+const {isWebUri} = require('valid-url')
 const logger = require('../logger')
 const store = require('../store')
 
@@ -32,7 +32,7 @@ bookmarksRouter
                 .send('Rating must be number between 0 and 5')
         }
 
-        if(!webId(url)) {
+        if(!isWebUri(url)) {
             logger.error(`Invalid url '${url}'`)
             return res
                 .status(400)
