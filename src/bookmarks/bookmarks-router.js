@@ -1,5 +1,6 @@
 const express = require('express')
 const uuid = require('uuid/v4')
+const {webId} = require('valid-url')
 const logger = require('../logger')
 const store = require('../store')
 
@@ -24,8 +25,15 @@ bookmarksRouter
             }
         }
 
-        if(!title) {
-            logger.error(`Title is required`)
+        if(!Number.isInteger(rating) || rating < 0 || rating > 5) {
+            logger.error(`Invalid rating '${rating}'`)
+            return res
+                .status(400)
+                .send('Rating must be number between 0 and 5')
+        }
+
+        if(!webId(url)) {
+            logger.error(`Invalid url '${url}'`)
             return res
                 .status(400)
                 .send('Invalid data')
